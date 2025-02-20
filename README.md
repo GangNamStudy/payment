@@ -192,7 +192,7 @@ PUT /api/v1/payment/{paymentId}/cancel
 ## Setup
 1. Clone repository
 ```bash
-git clone https://github.com/yourusername/payment.git
+git clone https://github.com/GangNamStudy/payment.git
 ```
 
 2. Configure database (application.yml)
