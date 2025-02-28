@@ -1,0 +1,11 @@
+spring-doc:
+  packages-to-scan: com.hunnit_beasts.payment.adapter.in.web
+  swagger-ui:
+    operations-sorter: alpha
+    tags-sorter: alpha
+    path: /swagger-ui.html
+    display-query-params-without-oauth2: true
+  api-docs:
+    path: /api-docs
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
