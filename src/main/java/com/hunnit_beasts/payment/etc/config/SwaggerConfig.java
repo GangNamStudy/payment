@@ -16,7 +16,7 @@ public class SwaggerConfig {
 
     private Info apiInfo() {
         return new Info()
-                .title("Payment API Documentaion")
+                .title("Payment API Documentation")
                 .description("Payment Swagger UI APIs")
                 .version("v0.0.1");
     }
