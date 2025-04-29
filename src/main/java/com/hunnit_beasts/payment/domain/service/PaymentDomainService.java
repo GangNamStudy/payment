@@ -37,9 +37,16 @@ public class PaymentDomainService {
     }
 
     /**
-     * 취소 정책을 적용하여 결제 취소 처리
+     * 부분 결제 취소 처리
      */
     public void cancelPayment(Payment payment, String reason, Money cancelAmount) {
         payment.cancel(reason, cancelAmount);
+    }
+
+    /**
+     * 전체 결제 취소 처리
+     */
+    public void cancelPayment(Payment payment, String reason) {
+        payment.cancel(reason);
     }
 }
