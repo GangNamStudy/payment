@@ -8,6 +8,7 @@ import lombok.ToString;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+
 @Getter
 @ToString
 @EqualsAndHashCode
@@ -32,15 +33,4 @@ public final class CancelInfo {
         return new CancelInfo(reason, amount, canceledAt);
     }
 
-    public String getReason() {
-        return reason;
-    }
-
-    public Money getAmount() {
-        return amount;
-    }
-
-    public LocalDateTime getCanceledAt() {
-        return canceledAt;
-    }
 }
