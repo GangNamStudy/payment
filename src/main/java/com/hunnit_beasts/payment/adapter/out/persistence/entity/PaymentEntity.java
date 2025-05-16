@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
- * 통합된 결제 JPA 엔티티
+ * 통합된 결제 JPA 엔티티 - 최소화 버전
  */
 @Entity
 @Table(
@@ -67,19 +67,6 @@ public class PaymentEntity {
     @Column(nullable = false, length = 30, name = "payment_method")
     @Comment("결제 수단 코드")
     private String paymentMethod;  // 결제 수단 코드
-
-    // 결제 방법 상세 정보 (필요시에만 사용)
-    @Column(length = 50)
-    @Comment("결제 제공자 (카드사, 간편결제 서비스 등)")
-    private String methodProvider;  // 결제 제공자
-
-    @Column(length = 25)
-    @Comment("마스킹된 카드 번호")
-    private String maskedCardNumber;  // 마스킹된 카드 번호
-
-    @Column
-    @Comment("할부 개월 수")
-    private Integer installmentMonths;  // 할부 개월 수
 
     // 결제 상태 정보
     @Column(nullable = false, length = 20)
