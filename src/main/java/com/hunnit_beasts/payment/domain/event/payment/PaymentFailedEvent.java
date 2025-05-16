@@ -1,6 +1,6 @@
 package com.hunnit_beasts.payment.domain.event.payment;
 
-import com.hunnit_beasts.payment.domain.model.identifier.ExternalIdentifier;
+import com.hunnit_beasts.payment.domain.model.payment.ExternalIdentifier;
 import com.hunnit_beasts.payment.domain.model.payment.PaymentId;
 import lombok.Getter;
 
