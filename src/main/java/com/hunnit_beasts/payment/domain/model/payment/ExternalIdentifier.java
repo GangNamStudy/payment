@@ -1,4 +1,4 @@
-package com.hunnit_beasts.payment.domain.model.identifier;
+package com.hunnit_beasts.payment.domain.model.payment;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
