@@ -42,6 +42,12 @@ dependencies {
 	// H2 DB
 	runtimeOnly 'com.h2database:h2'
 
+	// 제이슨 매퍼
+	implementation("com.fasterxml.jackson.core:jackson-databind:2.18.3")
+
+	// 포트원 결제 기능
+	implementation("io.portone:server-sdk:0.17.0")
+
 }
 
 tasks.named('test') {

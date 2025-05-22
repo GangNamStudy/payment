@@ -1,8 +1,8 @@
 package com.hunnit_beasts.payment.port.in.dto;
 
-import com.hunnit_beasts.payment.domain.enums.PaymentStatus;
 import com.hunnit_beasts.payment.domain.enums.SearchType;
 import com.hunnit_beasts.payment.domain.enums.SortDirection;
+import com.hunnit_beasts.payment.domain.model.payment.PaymentStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

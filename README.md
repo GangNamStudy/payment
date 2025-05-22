@@ -15,9 +15,9 @@
 
 ## API Endpoints
 
-### 1. 결제 요청
+### 1. 결제 완료 처리
 ```http
-POST /api/v1/payment
+POST /api/v1/payment/complete
 ```
 
 <details>
@@ -26,17 +26,7 @@ POST /api/v1/payment
 #### Request
 ```json
 {
-    "identifier": "ORD123456",            // 결제 식별자
-    "orderName": "2시간 주차권",          // 주문명
-    "amount": 5000,                       // 결제 금액
-    "paymentMethod": "CARD",              // 결제 수단
-    "paymentInfo": {
-        "type": "CARD",                   // 결제 상세 타입
-        "cardNumber": "1234-5678-9012-3456",  // 카드번호
-        "expiry": "0525",                 // 유효기간 (MMYY)
-        "cvc": "123",                     // CVC
-        "installmentMonths": 0            // 할부개월 (optional)
-    }
+  "paymentId": "imp_123456789"          // 결제 ID (포트원 결제 ID)
 }
 ```
 
@@ -189,6 +179,7 @@ PUT /api/v1/payment/{paymentId}/cancel
 - MySQL 8.0
 - Gradle
 
+
 ## Setup
 1. Clone repository
 ```bash
@@ -204,7 +195,18 @@ spring:
     password: password
 ```
 
-3. Run application
+3. Configure secret properties
+- `src/main/resources/application-secret.yml` 파일을 생성하고 다음 내용을 추가하세요:
+```yaml
+portone:
+  secret:
+    api: [your-api-key]
+    webhook: [your-webhook-key]
+    store-id: [your-store-id]
+```
+- 이 파일은 `.gitignore`에 포함되어 있으므로 git에 커밋되지 않습니다.
+
+4. Run application
 ```bash
 ./gradlew bootRun
 ```
