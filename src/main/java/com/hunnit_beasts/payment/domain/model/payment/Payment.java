@@ -7,8 +7,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
- * 결제 애그리거트 루트 - 간소화된 버전
- * 값 객체 패턴을 활용하여 관련 정보 그룹화
+ * 결제 애그리거트 루트
  */
 @Getter
 public class Payment {
@@ -90,5 +89,39 @@ public class Payment {
         this.processingInfo = Objects.requireNonNull(processingInfo, "결제 처리 정보는 null일 수 없습니다");
         this.statusInfo = Objects.requireNonNull(statusInfo, "결제 상태 정보는 null일 수 없습니다");
         this.pgResponse = pgResponse;
+    }
+
+    /**
+     * 결제 완료 처리 - 새로운 객체 반환 (불변성 유지)
+     */
+    public Payment complete(String receiptUrl, String updatedPgResponse) {
+        if (this.statusInfo.getStatus() == PaymentStatus.SUCCESS)
+            return this;
+
+        PaymentStatusInfo updatedStatusInfo = this.statusInfo.complete(receiptUrl);
+
+        return new Payment(
+                this.id,
+                this.identifier,
+                this.orderName,
+                this.amount,
+                this.processingInfo,
+                updatedStatusInfo,
+                updatedPgResponse != null ? updatedPgResponse : this.pgResponse
+        );
+    }
+
+    /**
+     * 결제가 완료되었는지 확인
+     */
+    public boolean isCompleted() {
+        return this.statusInfo.getStatus() == PaymentStatus.SUCCESS;
+    }
+
+    /**
+     * 결제가 취소 가능한지 확인
+     */
+    public boolean isCancelable() {
+        return this.statusInfo.getStatus() == PaymentStatus.SUCCESS;
     }
 }

@@ -3,10 +3,12 @@ package com.hunnit_beasts.payment.port.in;
 import com.hunnit_beasts.payment.application.dto.request.query.PaymentSearchRequestDto;
 import com.hunnit_beasts.payment.application.dto.response.query.PaymentListResponseDto;
 import com.hunnit_beasts.payment.application.dto.response.query.PaymentSummaryDto;
-import com.hunnit_beasts.payment.domain.vo.PaymentId;
+import com.hunnit_beasts.payment.domain.model.payment.PaymentId;
+import com.hunnit_beasts.payment.etc.config.annotation.UseCase;
 
 import java.util.Optional;
 
+@UseCase
 public interface PaymentQueryUseCase {
 
     /**

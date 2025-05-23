@@ -13,3 +13,4 @@ spring-doc:
 spring:
   profiles:
     active: dev
+    include: secret

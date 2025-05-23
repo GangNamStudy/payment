@@ -2,9 +2,9 @@ package com.hunnit_beasts.payment.application.dto.request.query;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.hunnit_beasts.payment.domain.enums.PaymentStatus;
 import com.hunnit_beasts.payment.domain.enums.SearchType;
 import com.hunnit_beasts.payment.domain.enums.SortDirection;
+import com.hunnit_beasts.payment.domain.model.payment.PaymentStatus;
 import com.hunnit_beasts.payment.port.in.dto.PaymentSearchCriteria;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
