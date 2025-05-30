@@ -3,6 +3,8 @@ package com.hunnit_beasts.payment.adapter.in.web;
 import com.hunnit_beasts.payment.application.dto.request.query.PaymentSearchRequestDto;
 import com.hunnit_beasts.payment.application.dto.response.query.PaymentListResponseDto;
 import com.hunnit_beasts.payment.application.dto.response.query.PaymentSummaryDto;
+import com.hunnit_beasts.payment.domain.model.payment.PaymentId;
+import com.hunnit_beasts.payment.port.in.PaymentQueryUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -10,16 +12,22 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/payment")
 @Tag(name = "Payment Query API", description = "결제 조회 API")
+@RequiredArgsConstructor
 public class PaymentQueryAdapter {
+
+    private final PaymentQueryUseCase paymentQueryUseCase;
 
     @GetMapping("/{paymentId}")
     @Operation(
@@ -36,9 +44,17 @@ public class PaymentQueryAdapter {
             @ApiResponse(responseCode = "500", description = "서버 오류")
     })
     public ResponseEntity<PaymentSummaryDto> getPayment(
-            @Parameter(description = "조회할 결제 ID", required = true, example = "1234")
-            @PathVariable Long paymentId) {
-        throw new UnsupportedOperationException();
+            @Parameter(description = "조회할 결제 ID", required = true, example = "550e8400-e29b-41d4-a716-446655440000")
+            @PathVariable String paymentId) {
+        try {
+            PaymentId id = PaymentId.of(paymentId);
+            return paymentQueryUseCase.getPayment(id)
+                    .map(ResponseEntity::ok)
+                    .orElse(ResponseEntity.notFound().build());
+        } catch (Exception e) {
+            log.error("결제 조회 중 오류 발생: paymentId={}", paymentId, e);
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
     @GetMapping
@@ -71,9 +87,9 @@ public class PaymentQueryAdapter {
             @RequestParam(required = false)
             @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime endDate,
 
-            @Parameter(description = "결제 상태 (PENDING, COMPLETED, FAILED, CANCELED)",
-                    example = "COMPLETED",
-                    schema = @Schema(allowableValues = {"PENDING", "COMPLETED", "FAILED", "CANCELED"}))
+            @Parameter(description = "결제 상태 (PENDING, SUCCESS, FAILED)",
+                    example = "SUCCESS",
+                    schema = @Schema(allowableValues = {"PENDING", "AUTHORIZED", "SUCCESS", "FAILED"}))
             @RequestParam(required = false) String status,
 
             @Parameter(description = "결제 방법 (CARD, KAKAO_PAY, TOSS_PAY)",
@@ -95,20 +111,24 @@ public class PaymentQueryAdapter {
 
             @Parameter(description = "페이지 크기", example = "10")
             @RequestParam(defaultValue = "10") Integer size) {
-
-        PaymentSearchRequestDto criteria = PaymentSearchRequestDto.builder()
-                .search(search)
-                .searchType(searchType)
-                .startDate(startDate)
-                .endDate(endDate)
-                .status(status)
-                .paymentMethod(paymentMethod)
-                .sortField(sortField)
-                .sortDirection(sortDirection)
-                .page(page)
-                .size(size)
-                .build();
-
-        throw new UnsupportedOperationException();
+        try {
+            PaymentSearchRequestDto criteria = PaymentSearchRequestDto.builder()
+                    .search(search)
+                    .searchType(searchType)
+                    .startDate(startDate)
+                    .endDate(endDate)
+                    .status(status)
+                    .paymentMethod(paymentMethod)
+                    .sortField(sortField)
+                    .sortDirection(sortDirection)
+                    .page(page)
+                    .size(size)
+                    .build();
+            PaymentListResponseDto response = paymentQueryUseCase.getPayments(criteria);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("결제 목록 조회 중 오류 발생", e);
+            return ResponseEntity.internalServerError().build();
+        }
     }
 }

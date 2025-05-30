@@ -3,8 +3,8 @@ package com.hunnit_beasts.payment.port.out;
 import com.hunnit_beasts.payment.domain.model.payment.Payment;
 import com.hunnit_beasts.payment.domain.model.payment.PaymentId;
 import com.hunnit_beasts.payment.port.in.dto.PaymentSearchCriteria;
+import org.springframework.data.domain.Page;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -30,5 +30,5 @@ public interface PaymentPersistencePort {
     /**
      * 검색 조건으로 결제 목록 조회
      */
-    List<Payment> search(PaymentSearchCriteria criteria);
+    Page<Payment> search(PaymentSearchCriteria criteria);
 }
