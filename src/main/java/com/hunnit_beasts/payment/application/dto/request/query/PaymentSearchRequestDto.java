@@ -68,7 +68,7 @@ public class PaymentSearchRequestDto {
     @JsonIgnore
     public PaymentSearchCriteria toDomain() {
         SearchType domainSearchType = null;
-        if (searchType != null) {
+        if (searchType != null && !searchType.trim().isEmpty()) {
             domainSearchType = switch (searchType.toUpperCase()) {
                 case "PAYMENT_ID" -> SearchType.PAYMENT_ID;
                 case "IDENTIFIER" -> SearchType.IDENTIFIER;
@@ -78,7 +78,7 @@ public class PaymentSearchRequestDto {
         }
 
         SortDirection domainSortDirection = null;
-        if (sortDirection != null) {
+        if (sortDirection != null && !sortDirection.trim().isEmpty()) {
             domainSortDirection = switch (sortDirection.toUpperCase()) {
                 case "ASC" -> SortDirection.ASC;
                 case "DESC" -> SortDirection.DESC;
@@ -87,7 +87,7 @@ public class PaymentSearchRequestDto {
         }
 
         PaymentStatus domainStatus = null;
-        if (status != null) {
+        if (status != null && !status.trim().isEmpty()) {
             try {
                 domainStatus = PaymentStatus.valueOf(status.toUpperCase());
             } catch (IllegalArgumentException ignored) {
@@ -95,13 +95,16 @@ public class PaymentSearchRequestDto {
             }
         }
 
+        String searchText = (search != null && !search.trim().isEmpty()) ? search : null;
+        String paymentType = (paymentMethod != null && !paymentMethod.trim().isEmpty()) ? paymentMethod : null;
+
         return new PaymentSearchCriteria(
-                search,
+                searchText,
                 domainSearchType,
                 startDate,
                 endDate,
                 domainStatus,
-                paymentMethod,
+                paymentType,
                 sortField,
                 domainSortDirection,
                 page != null ? page : 0,
