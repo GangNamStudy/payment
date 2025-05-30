@@ -5,6 +5,7 @@ import com.hunnit_beasts.payment.application.dto.request.commend.PaymentCancelRe
 import com.hunnit_beasts.payment.application.dto.response.commend.PaymentCancelResponseDto;
 import com.hunnit_beasts.payment.application.dto.response.commend.PaymentResponseDto;
 import com.hunnit_beasts.payment.port.in.PaymentCommendUseCase;
+import com.hunnit_beasts.payment.port.in.PaymentWebhookUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -17,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 @Slf4j
@@ -27,7 +29,7 @@ import java.util.concurrent.CompletableFuture;
 public class PaymentCommandAdapter {
 
     private final PaymentCommendUseCase paymentCommendUseCase;
-//    private final PaymentWebhookUseCase paymentWebhookUseCase;
+    private final PaymentWebhookUseCase paymentWebhookUseCase;
 
     @PostMapping("/complete")
     @Operation(
@@ -57,33 +59,16 @@ public class PaymentCommandAdapter {
     }
 
     @PostMapping("/webhook")
-    @Operation(
-            summary = "결제 웹훅 처리",
-            description = "포트원에서 전송된 웹훅을 처리합니다."
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "웹훅 처리 성공"),
-            @ApiResponse(responseCode = "400", description = "잘못된 요청"),
-            @ApiResponse(responseCode = "500", description = "서버 오류")
-    })
     public CompletableFuture<ResponseEntity<Void>> handleWebhook(
-            @RequestBody String body,
-            @RequestHeader("webhook-id") String webhookId,
-            @RequestHeader("webhook-timestamp") String webhookTimestamp,
-            @RequestHeader("webhook-signature") String webhookSignature) {
-        throw new UnsupportedOperationException();
-//        log.info("웹훅 수신: webhookId={}", webhookId);
-//
-//        return paymentWebhookUseCase.handleWebhook(webhookId, webhookTimestamp, webhookSignature, body)
-//                .handle((result, ex) -> {
-//                    if (ex != null) {
-//                        log.error("웹훅 처리 실패: webhookId={}", webhookId, ex);
-//                        return ResponseEntity.internalServerError().build();
-//                    } else {
-//                        log.info("웹훅 처리 완료: webhookId={}", webhookId);
-//                        return ResponseEntity.ok().build();
-//                    }
-//                });
+            @RequestBody Map<String, Object> webhookData) {
+
+        String impUid = (String) webhookData.get("imp_uid");
+        String merchantUid = (String) webhookData.get("merchant_uid");
+        String status = (String) webhookData.get("status");
+
+        paymentWebhookUseCase.handleWebhook(impUid,merchantUid,status);
+
+        return CompletableFuture.completedFuture(ResponseEntity.ok().build());
     }
 
     @PutMapping("/{paymentId}/cancel")
