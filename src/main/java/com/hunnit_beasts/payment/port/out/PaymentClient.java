@@ -1,5 +1,7 @@
 package com.hunnit_beasts.payment.port.out;
 
+import com.hunnit_beasts.payment.domain.model.external.ExternalPaymentInfo;
+
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -12,5 +14,5 @@ public interface PaymentClient {
      * @param paymentId 결제 ID
      * @return 결제 정보 (비동기)
      */
-    CompletableFuture<?> getPayment(String paymentId);
+    CompletableFuture<ExternalPaymentInfo> getPayment(String paymentId);
 }
