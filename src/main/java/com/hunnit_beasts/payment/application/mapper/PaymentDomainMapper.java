@@ -52,7 +52,7 @@ public class PaymentDomainMapper {
 
         // 결제 방식이 여전히 UNKNOWN이면 기본값 설정
         if ("UNKNOWN".equals(paymentMethod))
-            paymentMethod = "Kakaopay"; // 기본값 설정
+            paymentMethod = "KAKAO_PAY"; // 기본값 설정
 
         return paymentMethod;
     }
