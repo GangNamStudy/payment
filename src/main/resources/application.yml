@@ -14,3 +14,6 @@ spring:
   profiles:
     active: dev
     include: secret
+
+server:
+  port: 8080
